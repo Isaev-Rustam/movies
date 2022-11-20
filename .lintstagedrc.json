@@ -1,0 +1,4 @@
+{
+  "src/**/*.js": "eslint",
+  "(public|src)/**/*.(js|html|css)": "prettier --write"
+}

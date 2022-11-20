@@ -1,0 +1,30 @@
+@import-normalize;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.page .ant-pagination {
+  margin-top: auto;
+  align-self: center;
+  padding: 20px 0;
+}
+
+.page .ant-pagination-item-link {
+  border: none;
+}
+
+.page .ant-pagination-item {
+  border: none;
+}
+
+.page .ant-pagination-item-active {
+  background: #1890ff;
+  border-radius: 4px;
+}
+
+.page .ant-pagination-item-active a {
+  color: #ffffff;
+}

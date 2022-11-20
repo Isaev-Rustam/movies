@@ -1,0 +1,37 @@
+@font-face {
+  font-family: 'Inter';
+  src: local('Inter'), url('assets/fonts/Inter-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body,
+#root {
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  height: 100%;
+}
+
+body {
+  max-width: 1010px;
+  margin: 0 auto;
+  padding: 4rem 10px 0;
+}
+
+.ant-tabs-nav-wrap {
+  justify-content: center;
+}
+
+.ant-tabs,
+.ant-tabs-content {
+  height: 100%;
+}
+
+.ant-tabs-tabpane {
+  height: 100%;
+}
+
+.page{
+  max-width: 960px;
+}

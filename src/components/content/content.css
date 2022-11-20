@@ -1,0 +1,37 @@
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  flex-direction: column;
+  max-width: 800px;
+  padding-top: 40px;
+  margin: 0 auto;
+}
+
+.content-loader {
+  height: 100%;
+}
+
+.content-error {
+  justify-content: center;
+}
+
+@media (min-width: 817px) {
+  .content {
+    flex-direction: row;
+  }
+  .content-loader {
+    justify-content: space-between;
+    flex-direction: row;
+  }
+
+  .content-error {
+    justify-content: center;
+  }
+}
+@media (min-width: 956px) {
+  .content {
+    max-width: 100%;
+    justify-content: space-between;
+  }
+}
