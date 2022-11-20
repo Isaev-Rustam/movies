@@ -16,42 +16,46 @@ class SearchPage extends Component {
     error: false,
     loading: false,
     typeError: null,
+    message: '',
   };
 
   componentDidMount() {
-    const { getRatedMovies } = this.props;
-    const token = cookie.get('token-guest-sessions');
-    if (token) {
-      getRatedMovies(token, 'desc').then(({ movies }) => {
-        this.setState(() => ({ movies, error: false, loading: false }));
-      });
-    }
-    const { movies } = this.props;
-    this.setState({ movies });
+    this.getMovies();
   }
 
   componentDidUpdate(prevProps) {
-    const { views, getRatedMovies } = this.props;
+    const { views } = this.props;
     if (views !== prevProps.views && views === 'rated-page') {
-      const token = cookie.get('token-guest-sessions');
-      if (token) {
-        getRatedMovies(token, 'desc').then(({ movies }) => {
-          this.setState(() => ({ movies, error: false, loading: false }));
-        });
-      }
+      this.getMovies();
     }
   }
 
+  getMovies() {
+    const { getRatedMovies } = this.props;
+    const token = cookie.get('token-guest-sessions');
+    if (token) {
+      getRatedMovies(token, 'desc').then(this.onLoading).catch(this.onError);
+    }
+  }
+
+  onLoading = ({ movies }) => {
+    if (movies.length) {
+      this.setState(() => ({ movies, error: false, loading: false, typeError: null, message: '' }));
+    } else {
+      this.setState(() => ({ movies: [], error: true, loading: false, typeError: 'info', message: 'rated' }));
+    }
+  };
+
   onError = () => {
-    this.setState(() => ({ error: true, loading: false, typeError: 'error' }));
+    this.setState(() => ({ error: true, loading: false, typeError: 'error', message: 'error' }));
   };
 
   render() {
-    const { movies, error, loading, typeError } = this.state;
+    const { movies, error, loading, typeError, message } = this.state;
     const { postMovieRating, getImgUrl, token } = this.props;
 
     const alert = error ? (
-      <Alert message="Error" type={typeError} {...this.AlertMessage[typeError]} showIcon closable />
+      <Alert message="Error" type={typeError} {...this.AlertMessage[message]} showIcon closable />
     ) : null;
     const spin = loading ? <Spin indicator={<LoadingOutlined style={{ fontSize: 100 }} />} /> : null;
     const movieList = !(error || loading) ? (
@@ -81,7 +85,7 @@ class SearchPage extends Component {
 }
 SearchPage.defaultProps = {
   token: '',
-  views: '',
+  views: 'rated-page',
   getRatedMovies: () => {},
   getImgUrl: () => {},
   postMovieRating: () => {},

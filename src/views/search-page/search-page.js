@@ -19,6 +19,7 @@ class SearchPage extends Component {
     error: false,
     loading: false,
     typeError: null,
+    message: '',
     search: '',
     currentPage: 1,
     totalPages: 10,
@@ -41,14 +42,21 @@ class SearchPage extends Component {
 
   onLoading = ({ movies, totalPages }) => {
     if (movies.length) {
-      this.setState(() => ({ movies, totalPages, error: false, loading: false, typeError: null }));
+      this.setState(() => ({ movies, totalPages, error: false, loading: false, typeError: null, message: '' }));
     } else {
-      this.setState(() => ({ movies: [], totalPages, error: true, loading: false, typeError: 'info' }));
+      this.setState(() => ({
+        movies: [],
+        totalPages,
+        error: true,
+        loading: false,
+        typeError: 'info',
+        message: 'info',
+      }));
     }
   };
 
   onError = () => {
-    this.setState(() => ({ error: true, loading: false, typeError: 'error' }));
+    this.setState(() => ({ error: true, loading: false, typeError: 'error', message: 'error' }));
   };
 
   searchMovie = (movie, page) => {
@@ -68,11 +76,11 @@ class SearchPage extends Component {
   };
 
   render() {
-    const { movies, totalPages, currentPage, error, loading, search, typeError } = this.state;
+    const { movies, totalPages, currentPage, error, loading, search, typeError, message } = this.state;
     const { postMovieRating, getImgUrl, token } = this.props;
 
     const alert = error ? (
-      <Alert message="Error" type={typeError} {...this.AlertMessage[typeError]} showIcon closable />
+      <Alert message="Error" type={typeError} {...this.AlertMessage[message]} showIcon closable />
     ) : null;
     const spin = loading ? <Spin indicator={<LoadingOutlined style={{ fontSize: 100 }} />} /> : null;
     const movieList = !(error || loading) ? (

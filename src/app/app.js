@@ -76,39 +76,38 @@ class App extends Component {
         />
       ) : null;
 
+    const page = [
+      {
+        label: 'Search',
+        key: 'search-page',
+        children: (
+          <SearchPage
+            token={token}
+            getMovies={this.moviesApi.getMovies}
+            getImgUrl={this.moviesApi.getImageUrl}
+            postMovieRating={this.moviesApi.postMovieRating}
+          />
+        ),
+      },
+      {
+        label: 'Rated',
+        key: 'rated-page',
+        children: (
+          <RatedPage
+            token={token}
+            views={views}
+            getRatedMovies={this.moviesApi.getRatedMovies}
+            getImgUrl={this.moviesApi.getImageUrl}
+            postMovieRating={this.moviesApi.postMovieRating}
+          />
+        ),
+      },
+    ];
+
     return (
       <GenreProvider value={genre}>
         {alert}
-        <Tabs
-          onChange={this.onChange}
-          items={[
-            {
-              label: 'Search',
-              key: 'search-page',
-              children: (
-                <SearchPage
-                  token={token}
-                  getMovies={this.moviesApi.getMovies}
-                  getImgUrl={this.moviesApi.getImageUrl}
-                  postMovieRating={this.moviesApi.postMovieRating}
-                />
-              ),
-            },
-            {
-              label: 'Rated',
-              key: 'rated-page',
-              children: (
-                <RatedPage
-                  token={token}
-                  views={views}
-                  getRatedMovies={this.moviesApi.getRatedMovies}
-                  getImgUrl={this.moviesApi.getImageUrl}
-                  postMovieRating={this.moviesApi.postMovieRating}
-                />
-              ),
-            },
-          ]}
-        />
+        <Tabs onChange={this.onChange} items={page} />
       </GenreProvider>
     );
   }

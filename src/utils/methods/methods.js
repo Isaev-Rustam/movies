@@ -24,6 +24,7 @@ export function colorPicker(num) {
 export const AlertMessage = {
   error: { message: 'Ошибка при запросе.', description: 'Проверьте сетевое подключение.' },
   info: { message: 'По вашему запросу ничего не найдено.', description: 'Попробуйте изменить ваш запрос.' },
+  rated: { message: 'Нет отмеченных фильмов.', description: 'Оцените фильм на вкладке Search.' },
 };
 
 export const cookie = {
@@ -31,7 +32,7 @@ export const cookie = {
     const matches = document.cookie.match(
       new RegExp(`(?:^|; )${name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1')}=([^;]*)`)
     );
-    return matches.length ? decodeURIComponent(matches[1]) : false;
+    return matches ? decodeURIComponent(matches[1]) : false;
   },
 
   set(name, value, expires) {
