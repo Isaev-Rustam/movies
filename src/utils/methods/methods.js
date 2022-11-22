@@ -22,7 +22,7 @@ export function colorPicker(num) {
 }
 
 export const AlertMessage = {
-  error: { message: 'Ошибка при запросе.', description: 'Проверьте сетевое подключение.' },
+  error: { message: 'Ошибка при запросе.', description: 'Проверьте сетевое подключение или включен ли у вас vpn' },
   info: { message: 'По вашему запросу ничего не найдено.', description: 'Попробуйте изменить ваш запрос.' },
   rated: { message: 'Нет отмеченных фильмов.', description: 'Оцените фильм на вкладке Search.' },
 };

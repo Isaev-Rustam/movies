@@ -5,7 +5,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Component } from 'react';
 import * as propTypes from 'prop-types';
 
-import { AlertMessage, cookie } from 'utils';
+import { AlertMessage } from 'utils';
 import { ErrorBoundary, MovieList, Content } from 'components';
 
 class SearchPage extends Component {
@@ -24,17 +24,16 @@ class SearchPage extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { views } = this.props;
-    if (views !== prevProps.views && views === 'rated-page') {
+    const { views, token } = this.props;
+    if ((views !== prevProps.views && views === 'rated-page') || token !== prevProps.token) {
       this.getMovies();
     }
   }
 
   getMovies() {
-    const { getRatedMovies } = this.props;
-    const token = cookie.get('token-guest-sessions');
+    const { getMovies, token } = this.props;
     if (token) {
-      getRatedMovies(token, 'desc').then(this.onLoading).catch(this.onError);
+      getMovies(token, 'desc').then(this.onLoading).catch(this.onError);
     }
   }
 
