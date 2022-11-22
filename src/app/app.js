@@ -1,4 +1,4 @@
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 import './app.css';
 import { Alert, Tabs } from 'antd';
 import { Component } from 'react';
@@ -11,11 +11,15 @@ import { cookie } from 'utils';
 class App extends Component {
   moviesApi = new MoviesApi();
 
+  COOKIE_KEY = 'token-guest-sessions';
+
   state = {
     genre: {},
     token: null,
     guestSessionError: false,
+    loadingGuestSession: true,
     genreError: false,
+    loadingGenre: true,
     views: 'search-page',
   };
 
@@ -33,48 +37,44 @@ class App extends Component {
   }
 
   onLoadingGenre = (genre) => {
-    if (Object.keys(genre).length) {
-      this.setState(() => ({ genre, genreError: false }));
-    } else {
-      this.setState(() => ({ genre: {}, genreError: false }));
-    }
+    this.setState(() => ({ genre, genreError: false, loadingGenre: false }));
   };
 
   onErrorGenre = () => {
-    this.setState(() => ({ genreError: true }));
+    this.setState(() => ({ genre: {}, genreError: true, loadingGenre: false }));
   };
 
   onLoadingGuestSession = ({ token, expires }) => {
-    cookie.set('token-guest-sessions', token, expires);
-    this.setState(() => ({ token, guestSessionError: false }));
+    cookie.set(this.COOKIE_KEY, token, expires);
+    this.setState(() => ({ token, guestSessionError: false, loadingGuestSession: false }));
   };
 
   onErrorGuestSession = () => {
-    this.setState(() => ({ guestSessionError: true }));
+    this.setState(() => ({ guestSessionError: true, loadingGuestSession: false }));
   };
 
-  createGuestSession() {
-    const token = cookie.get('token-guest-sessions');
+  createGuestSession = () => {
+    const token = cookie.get(this.COOKIE_KEY);
     if (token) {
-      this.setState({ token, guestSessionError: false });
+      this.setState({ token, guestSessionError: false, loadingGuestSession: false });
     } else {
       this.moviesApi.getCreateGuestSession().then(this.onLoadingGuestSession).catch(this.onErrorGuestSession);
     }
-  }
+  };
 
   render() {
-    const { genre, token, views, guestSessionError, genreError } = this.state;
+    const { genre, token, views, guestSessionError, genreError, loadingGenre, loadingGuestSession } = this.state;
 
-    const alert =
-      genreError || guestSessionError ? (
-        <Alert
-          type="error"
-          message="Ошибка при запросе."
-          description="Проверьте сетевое подключение."
-          showIcon
-          closable
-        />
-      ) : null;
+    const hesAlert = genreError && !loadingGenre && guestSessionError && !loadingGuestSession;
+    const alert = hesAlert ? (
+      <Alert
+        type="error"
+        message="Ошибка при запросе."
+        description="Проверьте сетевое подключение или включен ли у вас vpn."
+        showIcon
+        closable
+      />
+    ) : null;
 
     const page = [
       {
@@ -95,10 +95,10 @@ class App extends Component {
         children: (
           <RatedPage
             token={token}
-            views={views}
-            getRatedMovies={this.moviesApi.getRatedMovies}
+            getMovies={this.moviesApi.getRatedMovies}
             getImgUrl={this.moviesApi.getImageUrl}
             postMovieRating={this.moviesApi.postMovieRating}
+            views={views}
           />
         ),
       },
