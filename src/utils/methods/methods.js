@@ -2,6 +2,7 @@ export function cutString(str, limit) {
   if (typeof str !== 'string') {
     throw new TypeError('Argument must be of type string');
   }
+
   if (str.length <= limit) return str;
 
   let text = str.trim().slice(0, limit);
